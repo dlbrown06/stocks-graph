@@ -23,6 +23,7 @@ const Query = {
 const Mutation = {
   createOptionLedgerEntry: async (parent, { 
     ticker, 
+    option_type,
     open_date,
     close_date,
     status,
@@ -42,12 +43,12 @@ const Mutation = {
       const results = await db.query(
         `
         INSERT INTO stocks.options_ledger
-          (member_id, ticker, open_date, close_date, status, contracts, strike, credit, debit, expiration)
+          (member_id, ticker, option_type, open_date, close_date, status, contracts, strike, credit, debit, expiration)
         VALUES
-          ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+          ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING *
       `,
-        [process.env.STOCKS_DEFAULT_USER, ticker, open_date, close_date, status, contracts, strike, credit, debit, expiration]
+        [process.env.STOCKS_DEFAULT_USER, ticker, option_type, open_date, close_date, status, contracts, strike, credit, debit, expiration]
       );
 
       return results.rows[0];

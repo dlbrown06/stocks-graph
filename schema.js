@@ -8,6 +8,7 @@ const typeDefs = gql`
   type Mutation {
     createOptionLedgerEntry(
       ticker: String!
+      option_type: String!
       open_date: String!
       close_date: String
       status: String!
