@@ -1,3 +1,4 @@
+const moment = require("moment");
 // const { getAthlete } = require("../utils");
 
 const Query = {
@@ -12,7 +13,12 @@ const Query = {
       const result = await db.query(
         "SELECT * FROM stocks.options_ledger ORDER BY updated_on DESC"
       );
-      return result.rows;
+      return result.rows.map(row => {
+        row.open_date = moment(row.open_date).format("YYYY-MM-DD");
+        row.close_date = moment(row.close_date).format("YYYY-MM-DD");
+        row.expiration = moment(row.expiration).format("YYYY-MM-DD");
+        return row;
+      });
     } catch (error) {
       logger.error({ error }, "Failed to query option ledger");
       return [];

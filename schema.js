@@ -1,6 +1,8 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
+  scalar Date
+
   type Query {
     getOptionLedger: [OptionsLedger]
   }
@@ -9,7 +11,7 @@ const typeDefs = gql`
     createOptionLedgerEntry(
       ticker: String!
       option_type: String!
-      open_date: String!
+      open_date: Date!
       close_date: String
       status: String!
       contracts: Int!
