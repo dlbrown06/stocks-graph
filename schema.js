@@ -34,6 +34,14 @@ const typeDefs = gql`
     credit: String
     debit: String
     expiration: String
+    annualized_return: String
+    daily_return: String
+    target_premium: String
+    buyout_target: String
+    gross_credit: String
+    net_credit: String
+    collateral: String
+    days_open: Int
     created_on: String
     updated_on: String
   }

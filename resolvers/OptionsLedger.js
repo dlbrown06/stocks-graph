@@ -11,9 +11,9 @@ const Query = {
 
     try {
       const result = await db.query(
-        "SELECT * FROM stocks.options_ledger ORDER BY updated_on DESC"
+        "SELECT * FROM stocks.options_ledger_metrics ORDER BY expiration DESC"
       );
-      return result.rows.map(row => {
+      return result.rows.map((row) => {
         row.open_date = moment(row.open_date).format("YYYY-MM-DD");
         row.close_date = moment(row.close_date).format("YYYY-MM-DD");
         row.expiration = moment(row.expiration).format("YYYY-MM-DD");
@@ -23,22 +23,26 @@ const Query = {
       logger.error({ error }, "Failed to query option ledger");
       return [];
     }
-  }
+  },
 };
 
 const Mutation = {
-  createOptionLedgerEntry: async (parent, { 
-    ticker, 
-    option_type,
-    open_date,
-    close_date,
-    status,
-    contracts,
-    strike,
-    credit,
-    debit,
-    expiration 
-  }, context) => {
+  createOptionLedgerEntry: async (
+    parent,
+    {
+      ticker,
+      option_type,
+      open_date,
+      close_date,
+      status,
+      contracts,
+      strike,
+      credit,
+      debit,
+      expiration,
+    },
+    context
+  ) => {
     const { db, logger } = context;
     // const athlete = getAthlete(context);
     // if (!athlete) {
@@ -48,13 +52,25 @@ const Mutation = {
     try {
       const results = await db.query(
         `
-        INSERT INTO stocks.options_ledger
+        INSERT INTO stocks.options_ledger_metrics
           (member_id, ticker, option_type, open_date, close_date, status, contracts, strike, credit, debit, expiration)
         VALUES
           ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING *
       `,
-        [process.env.STOCKS_DEFAULT_USER, ticker, option_type, open_date, close_date, status, contracts, strike, credit, debit, expiration]
+        [
+          process.env.STOCKS_DEFAULT_USER,
+          ticker,
+          option_type,
+          open_date,
+          close_date,
+          status,
+          contracts,
+          strike,
+          credit,
+          debit,
+          expiration,
+        ]
       );
 
       return results.rows[0];
@@ -145,5 +161,5 @@ const Mutation = {
 
 module.exports = {
   Query,
-  Mutation
+  Mutation,
 };

@@ -2,9 +2,10 @@
   "name": "stocks-graph",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "nodemon --inspect server.js"
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,11 @@
     "pg": "^8.5.1",
     "pino": "^6.11.0",
     "pino-pretty": "^4.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^2.2.1"
   }
 }
