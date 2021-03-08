@@ -11,7 +11,7 @@ const Query = {
 
     try {
       const result = await db.query(
-        "SELECT * FROM stocks.options_ledger_metrics ORDER BY expiration DESC"
+        "SELECT * FROM stocks.options_ledger_metrics ORDER BY status ASC, expiration DESC"
       );
       return result.rows.map((row) => {
         row.open_date = moment(row.open_date).format("YYYY-MM-DD");

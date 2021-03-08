@@ -26,6 +26,7 @@ const typeDefs = gql`
     id: ID!
     member_id: ID!
     ticker: String!
+    option_type: String!
     open_date: String!
     close_date: String
     status: String!
