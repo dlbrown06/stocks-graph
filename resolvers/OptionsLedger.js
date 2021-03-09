@@ -79,85 +79,42 @@ const Mutation = {
       return { error };
     }
   },
+  updateOptionLedgerEntry: async (parent, args, context) => {
+    const { db, logger } = context;
+    // const athlete = getAthlete(context);
+    // if (!athlete) {
+    //   throw new Error("Athlete Not Logged In");
+    // }
+
+    const id = args.id;
+    delete args["id"];
+
+    const mutations = [];
+    let sql = `UPDATE stocks.options_ledger SET `;
+    let mutationCnt = 0;
+    for (const param in args) {
+      mutations[param] = args[param];
+      sql += `${param}=$${++mutationCnt},`;
+    }
+    sql += `updated_on=$${++mutationCnt} WHERE id=$${mutationCnt + 1}`;
+    const payload = [];
+    for (const param in mutations) {
+      payload.push(mutations[param]);
+    }
+    payload.push(new Date());
+    payload.push(id);
+    sql += ` RETURNING *`;
+
+    try {
+      const results = await db.query(sql, payload);
+
+      return results.rows[0];
+    } catch (error) {
+      logger.error(error, "Failed to mutate with updateOptionLedgerEntry");
+      return { error };
+    }
+  },
 };
-
-// const Mutation = {
-//   createEquipment: async (parent, { name, slug, description }, context) => {
-//     const { db, logger } = context;
-//     const athlete = getAthlete(context);
-//     if (!athlete) {
-//       throw new Error("Athlete Not Logged In");
-//     }
-
-//     try {
-//       const results = await db.query(
-//         `
-//         INSERT INTO wodiki.equipment
-//           (name, slug, description)
-//         VALUES
-//           ($1, $2, $3)
-//         RETURNING *
-//       `,
-//         [name, slug, description]
-//       );
-
-//       return _.get(results, "rows[0]", {});
-//     } catch (error) {
-//       logger.error(error, "Failed to mutate with createEquipment");
-//       return { error };
-//     }
-//   },
-//   updateEquipment: async (parent, { name, slug, description }, context) => {
-//     const { db, logger } = context;
-//     const athlete = getAthlete(context);
-//     if (!athlete) {
-//       throw new Error("Athlete Not Logged In");
-//     }
-
-//     try {
-//       const results = await db.query(
-//         `
-//         INSERT INTO wodiki.equipment
-//           (name, slug, description)
-//         VALUES
-//           ($1, $2, $3)
-//         RETURNING *
-//       `,
-//         [name, slug, description]
-//       );
-
-//       return _.get(results, "rows[0]", {});
-//     } catch (error) {
-//       logger.error(error, "Failed to mutate with createEquipment");
-//       return { error };
-//     }
-//   },
-//   deleteEquipment: async (parent, { id }, context) => {
-//     const { db, logger } = context;
-//     const athlete = getAthlete(context);
-//     if (!athlete) {
-//       throw new Error("Athlete Not Logged In");
-//     }
-
-//     try {
-//       await db.query(
-//         `
-//           DELETE
-//           FROM
-//             wodiki.equipment
-//           WHERE
-//             ID = $1
-//         `,
-//         [id]
-//       );
-
-//       return true;
-//     } catch (error) {
-//       logger.error(error, "Failed to mutate with deleteEquipment");
-//       return false;
-//     }
-//   }
-// };
 
 module.exports = {
   Query,

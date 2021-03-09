@@ -20,6 +20,20 @@ const typeDefs = gql`
       debit: String
       expiration: String
     ): OptionsLedger
+
+    updateOptionLedgerEntry(
+      id: ID!
+      ticker: String
+      option_type: String
+      open_date: Date
+      close_date: String
+      status: String
+      contracts: Int
+      strike: String
+      credit: String
+      debit: String
+      expiration: String
+    ): OptionsLedger
   }
 
   type OptionsLedger {
