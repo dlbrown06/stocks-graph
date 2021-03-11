@@ -34,6 +34,8 @@ const typeDefs = gql`
       debit: String
       expiration: String
     ): OptionsLedger
+
+    deleteOptionLedgerEntry(id: ID!): Boolean
   }
 
   type OptionsLedger {

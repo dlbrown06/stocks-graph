@@ -11,7 +11,7 @@ const Query = {
 
     try {
       const result = await db.query(
-        "SELECT * FROM stocks.options_ledger_metrics ORDER BY status ASC, expiration DESC"
+        "SELECT * FROM stocks.options_ledger_metrics ORDER BY status ASC, expiration DESC, updated_on DESC"
       );
       return result.rows.map((row) => {
         row.open_date = moment(row.open_date).format("YYYY-MM-DD");
@@ -112,6 +112,27 @@ const Mutation = {
     } catch (error) {
       logger.error(error, "Failed to mutate with updateOptionLedgerEntry");
       return { error };
+    }
+  },
+  deleteOptionLedgerEntry: async (parent, args, context) => {
+    const { db, logger } = context;
+    // const athlete = getAthlete(context);
+    // if (!athlete) {
+    //   throw new Error("Athlete Not Logged In");
+    // }
+
+    const { id } = args;
+
+    try {
+      const results = await db.query(
+        `DELETE FROM stocks.options_ledger WHERE id=$1`,
+        [id]
+      );
+
+      return true;
+    } catch (error) {
+      logger.error(error, "Failed to mutate with deleteptionLedgerEntry");
+      return false;
     }
   },
 };
