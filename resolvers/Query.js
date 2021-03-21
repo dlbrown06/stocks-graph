@@ -1,5 +1,7 @@
-const Ledger = require("./OptionsLedger");
+const OptionsLedger = require("./OptionsLedger");
+const Member = require("./Member");
 
 module.exports = {
-  ...Ledger.Query
+  ...OptionsLedger.Query,
+  ...Member.Query,
 };

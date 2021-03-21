@@ -8,6 +8,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    login(email: String!, password: String!): AuthPayload
     createOptionLedgerEntry(
       ticker: String!
       option_type: String!
@@ -36,6 +37,20 @@ const typeDefs = gql`
     ): OptionsLedger
 
     deleteOptionLedgerEntry(id: ID!): Boolean
+  }
+
+  type AuthPayload {
+    token: String
+    member: Member
+  }
+
+  type Member {
+    id: String
+    email: String
+    alias: String
+    first_name: String
+    last_name: String
+    created_on: String
   }
 
   type OptionsLedger {
