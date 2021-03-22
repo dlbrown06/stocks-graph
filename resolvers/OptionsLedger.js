@@ -1,17 +1,18 @@
 const moment = require("moment");
-// const { getAthlete } = require("../utils");
+const getMember = require("../lib/getMember");
 
 const Query = {
   getOptionLedger: async (parent, args, context) => {
     const { logger, db } = context;
-    // const athlete = getAthlete(context);
-    // if (!athlete) {
-    //   throw new Error("Athlete Not Logged In");
-    // }
+    const member = getMember(context);
+    if (!member) {
+      throw new Error("Member Not Logged In");
+    }
 
     try {
       const result = await db.query(
-        "SELECT * FROM stocks.options_ledger_metrics ORDER BY status ASC, expiration DESC, updated_on DESC"
+        "SELECT * FROM stocks.options_ledger_metrics WHERE member_id=$1 ORDER BY status ASC, expiration DESC, updated_on DESC",
+        [member.id]
       );
       return result.rows.map((row) => {
         row.open_date = moment(row.open_date).format("YYYY-MM-DD");
@@ -44,10 +45,10 @@ const Mutation = {
     context
   ) => {
     const { db, logger } = context;
-    // const athlete = getAthlete(context);
-    // if (!athlete) {
-    //   throw new Error("Athlete Not Logged In");
-    // }
+    const member = getMember(context);
+    if (!member) {
+      throw new Error("Member Not Logged In");
+    }
 
     try {
       const results = await db.query(
@@ -59,7 +60,7 @@ const Mutation = {
         RETURNING *
       `,
         [
-          process.env.STOCKS_DEFAULT_USER,
+          member.id,
           ticker,
           option_type,
           open_date,
@@ -80,11 +81,10 @@ const Mutation = {
     }
   },
   updateOptionLedgerEntry: async (parent, args, context) => {
-    const { db, logger } = context;
-    // const athlete = getAthlete(context);
-    // if (!athlete) {
-    //   throw new Error("Athlete Not Logged In");
-    // }
+    const member = getMember(context);
+    if (!member) {
+      throw new Error("Member Not Logged In");
+    }
 
     const id = args.id;
     delete args["id"];
@@ -96,13 +96,16 @@ const Mutation = {
       mutations[param] = args[param];
       sql += `${param}=$${++mutationCnt},`;
     }
-    sql += `updated_on=$${++mutationCnt} WHERE id=$${mutationCnt + 1}`;
+    sql += `updated_on=$${++mutationCnt} WHERE id=$${mutationCnt + 1} AND $${
+      mutationCnt + 2
+    }`;
     const payload = [];
     for (const param in mutations) {
       payload.push(mutations[param]);
     }
     payload.push(new Date());
     payload.push(id);
+    payload.push(member.id);
     sql += ` RETURNING *`;
 
     try {
@@ -116,17 +119,17 @@ const Mutation = {
   },
   deleteOptionLedgerEntry: async (parent, args, context) => {
     const { db, logger } = context;
-    // const athlete = getAthlete(context);
-    // if (!athlete) {
-    //   throw new Error("Athlete Not Logged In");
-    // }
+    const member = getMember(context);
+    if (!member) {
+      throw new Error("Member Not Logged In");
+    }
 
     const { id } = args;
 
     try {
       const results = await db.query(
-        `DELETE FROM stocks.options_ledger WHERE id=$1`,
-        [id]
+        `DELETE FROM stocks.options_ledger WHERE id=$1 AND member_id=$2`,
+        [id, member.id]
       );
 
       return true;
