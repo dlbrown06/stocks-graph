@@ -25,6 +25,25 @@ const Query = {
       return [];
     }
   },
+
+  getOptionMonthlyPNL: async (parent, args, context) => {
+    const { logger, db } = context;
+    const member = getMember(context);
+    if (!member) {
+      throw new Error("Member Not Logged In");
+    }
+
+    try {
+      const result = await db.query(
+        "SELECT * FROM stocks.options_ticker_pnl_by_month WHERE member_id=$1",
+        [member.id]
+      );
+      return result.rows;
+    } catch (error) {
+      logger.error({ error }, "Failed to query option ledger");
+      return [];
+    }
+  },
 };
 
 const Mutation = {
@@ -81,6 +100,7 @@ const Mutation = {
     }
   },
   updateOptionLedgerEntry: async (parent, args, context) => {
+    const { db, logger } = context;
     const member = getMember(context);
     if (!member) {
       throw new Error("Member Not Logged In");
@@ -96,9 +116,9 @@ const Mutation = {
       mutations[param] = args[param];
       sql += `${param}=$${++mutationCnt},`;
     }
-    sql += `updated_on=$${++mutationCnt} WHERE id=$${mutationCnt + 1} AND $${
-      mutationCnt + 2
-    }`;
+    sql += `updated_on=$${++mutationCnt} WHERE id=$${
+      mutationCnt + 1
+    } AND member_id=$${mutationCnt + 2}`;
     const payload = [];
     for (const param in mutations) {
       payload.push(mutations[param]);
