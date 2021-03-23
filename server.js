@@ -1,6 +1,6 @@
 require("dotenv").config();
-const express = require('express');
-const { ApolloServer, gql } = require('apollo-server-express');
+const express = require("express");
+const { ApolloServer } = require("apollo-server-express");
 
 const db = require("./db");
 const logger = require("./logger");
@@ -11,22 +11,26 @@ const Mutation = require("./resolvers/Mutation");
 
 const resolvers = {
   Query,
-  Mutation
+  Mutation,
 };
- 
-const typeDefs = require('./schema.js');
- 
-const server = new ApolloServer({ 
-  typeDefs, 
+
+const typeDefs = require("./schema.js");
+
+const server = new ApolloServer({
+  typeDefs,
   resolvers,
-  context: request => {
+  context: (request) => {
     return { ...request, db, logger };
-  }
+  },
 });
- 
+
 const app = express();
 server.applyMiddleware({ app });
- 
-app.listen({ port: 4000 }, () =>
-  console.log('Now browse to http://localhost:4000' + server.graphqlPath)
+
+const PORT = process.env.PORT || 4000;
+
+app.listen({ port: PORT }, () =>
+  console.log(
+    `🚀 Server ready at http://localhost:${PORT}` + server.graphqlPath
+  )
 );
