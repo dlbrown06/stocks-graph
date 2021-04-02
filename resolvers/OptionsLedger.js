@@ -35,6 +35,25 @@ const Query = {
 
     try {
       const result = await db.query(
+        "SELECT * FROM stocks.options_monthly_pnl WHERE member_id=$1",
+        [member.id]
+      );
+      return result.rows;
+    } catch (error) {
+      logger.error({ error }, "Failed to query option ledger");
+      return [];
+    }
+  },
+
+  getOptionMonthlyPNLbyTicker: async (parent, args, context) => {
+    const { logger, db } = context;
+    const member = getMember(context);
+    if (!member) {
+      throw new Error("Member Not Logged In");
+    }
+
+    try {
+      const result = await db.query(
         "SELECT * FROM stocks.options_ticker_pnl_by_month WHERE member_id=$1",
         [member.id]
       );

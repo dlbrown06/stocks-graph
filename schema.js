@@ -6,6 +6,7 @@ const typeDefs = gql`
   type Query {
     getOptionLedger: [OptionsLedger]
     getOptionMonthlyPNL: [OptionsPNL]
+    getOptionMonthlyPNLbyTicker: [OptionsPNLbyTicker]
   }
 
   type Mutation {
@@ -79,10 +80,18 @@ const typeDefs = gql`
     updated_on: String
   }
 
-  type OptionsPNL {
+  type OptionsPNLbyTicker {
     member_id: ID!
     month: String!
     ticker: String!
+    credit: String!
+    debit: String
+    total: String!
+  }
+
+  type OptionsPNL {
+    member_id: ID!
+    month: String!
     credit: String!
     debit: String
     total: String!
