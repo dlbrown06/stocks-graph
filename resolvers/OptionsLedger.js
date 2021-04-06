@@ -26,7 +26,8 @@ const Query = {
       const result = await db.query(
         `SELECT * FROM stocks.options_ledger_metrics WHERE ${where.join(
           " and "
-        )} ORDER BY status ASC, expiration DESC, updated_on DESC`,
+          // )} ORDER BY status ASC, expiration DESC, updated_on DESC`,
+        )} ORDER BY open_date DESC, close_date DESC, updated_on DESC`,
         whereParams
       );
 
