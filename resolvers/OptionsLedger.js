@@ -9,11 +9,27 @@ const Query = {
       throw new Error("Member Not Logged In");
     }
 
+    // building the where clause
+    const where = ["member_id=$1"];
+    const whereParams = [member.id];
+    const { tickers, status } = args;
+    if (tickers) {
+      where.push("ticker = ANY ($2)");
+      whereParams.push(tickers);
+    }
+    if (status) {
+      where.push("status = ANY ($3)");
+      whereParams.push(status);
+    }
+
     try {
       const result = await db.query(
-        "SELECT * FROM stocks.options_ledger_metrics WHERE member_id=$1 ORDER BY status ASC, expiration DESC, updated_on DESC",
-        [member.id]
+        `SELECT * FROM stocks.options_ledger_metrics WHERE ${where.join(
+          " and "
+        )} ORDER BY status ASC, expiration DESC, updated_on DESC`,
+        whereParams
       );
+
       return result.rows.map((row) => {
         row.open_date = moment(row.open_date).format("YYYY-MM-DD");
         row.close_date = moment(row.close_date).format("YYYY-MM-DD");
