@@ -4,6 +4,7 @@ const typeDefs = gql`
   scalar Date
 
   type Query {
+    getOptionPosition(option_id: ID!): OptionsLedger
     getOptionLedger(tickers: [String], status: [String]): [OptionsLedger]
     getOptionMonthlyPNL: [OptionsPNL]
     getOptionMonthlyPNLbyTicker: [OptionsPNLbyTicker]
