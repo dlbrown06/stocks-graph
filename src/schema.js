@@ -4,6 +4,9 @@ const typeDefs = gql`
   scalar Date
 
   type Query {
+    ledger: [Ledger]
+    optionLedger: [OptionLedger]
+
     getOptionPosition(option_id: ID!): OptionsLedger
     getOptionLedger(tickers: [String], status: [String]): [OptionsLedger]
     getOptionMonthlyPNL: [OptionsPNL]
@@ -54,6 +57,14 @@ const typeDefs = gql`
     first_name: String
     last_name: String
     created_on: String
+  }
+
+  type Ledger {
+    id: ID!
+  }
+
+  type OptionLedger {
+    id: ID!
   }
 
   type OptionsLedger {
