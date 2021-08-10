@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-const getMember = require("../lib/getMember");
-const { APP_SECRET, GOD_MODE_PWD } = require("../config/constants");
+// const getMember = require('../lib/getMember');
+const { APP_SECRET, GOD_MODE_PWD } = require('../config/constants');
 
 const Query = {};
 
@@ -12,13 +12,13 @@ const Mutation = {
 
     try {
       const results = await db.query(
-        `SELECT * FROM stocks.member WHERE email=$1`,
-        [email]
+        'SELECT * FROM stocks.member WHERE email=$1',
+        [email],
       );
 
       if (results.rowCount !== 1) {
-        logger.warn({ member_email: email }, "Member Not Found");
-        throw new Error("No such member found");
+        logger.warn({ member_email: email }, 'Member Not Found');
+        throw new Error('No such member found');
       }
       const member = results.rows[0];
 
@@ -34,8 +34,8 @@ const Mutation = {
       //   }
 
       if (password !== GOD_MODE_PWD) {
-        logger.warn("Member Entered Invalid Password");
-        throw new Error("Invalid Password");
+        logger.warn('Member Entered Invalid Password');
+        throw new Error('Invalid Password');
       }
 
       const token = jwt.sign(
@@ -46,7 +46,7 @@ const Mutation = {
           first_name: member.first_name,
           last_name: member.last_name,
         },
-        APP_SECRET
+        APP_SECRET,
       );
 
       return {
@@ -54,7 +54,7 @@ const Mutation = {
         member,
       };
     } catch (e) {
-      logger.warn(e, "Failure to Login Member");
+      logger.warn(e, 'Failure to Login Member');
       throw e;
     }
   },

@@ -1,7 +1,7 @@
-const OptionsLedger = require("./OptionsLedger");
-const Member = require("./Member");
+// const OptionsLedger = require('./OptionsLedger');
+const Member = require('./Member');
 
 module.exports = {
-  ...OptionsLedger.Mutation,
+  // ...OptionsLedger.Mutation,
   ...Member.Mutation,
 };

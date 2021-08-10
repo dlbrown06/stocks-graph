@@ -1,9 +1,7 @@
-const OptionsLedger = require("./OptionsLedger");
-const Ledger = require("./Ledger");
-const Member = require("./Member");
+const Ledger = require('./components/Ledger');
+const OptionLedger = require('./components/OptionLedger');
 
 module.exports = {
-  ...OptionsLedger.Query,
   ...Ledger.Query,
-  ...Member.Query,
+  ...OptionLedger.Query,
 };
