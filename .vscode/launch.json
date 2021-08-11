@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Launch Graph",
       "runtimeExecutable": "nodemon",
-      "program": "${workspaceFolder}/bin/www",
+      "program": "${workspaceFolder}/src/index.js",
       "restart": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",

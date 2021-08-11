@@ -32,15 +32,8 @@ const Query = {
         `,
         whereParams,
       );
-      console.log(result);
-      //   return result.rows
-      //     .map((row) => {
-      //       row.open_date = moment(row.open_date).format('YYYY-MM-DD');
-      //       row.close_date = moment(row.close_date).format('YYYY-MM-DD');
-      //       row.expiration = moment(row.expiration).format('YYYY-MM-DD');
-      //       return row;
-      //     })
-      //     .pop();
+
+      return result.rows;
     } catch (error) {
       logger.error(error, 'Failed to query ledger');
       return [];
