@@ -1,9 +1,10 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
+  
   type Query {
-    ledger: [LedgerRecord]
-    optionLedger: [String]
+    ledger(offset: Int, limit: Int): [LedgerRecord]!
+    optionLedger(offset: Int, limit: Int): [LedgerOptionRecord]!
   }
 
   type Mutation {
@@ -24,8 +25,10 @@ const typeDefs = gql`
     created_on: String
   }
 
+  "Robinhood UUID representing the symbol"
   type LedgerRecord {
     id: ID!
+    "Robinhood UUID representing the symbol"
     instrument_id: ID!
     symbol: String!
     simple_name: String!
@@ -38,7 +41,7 @@ const typeDefs = gql`
     cancel: String
     trigger: String!
     quantity: Float!
-    executions: String!
+    executions: [LedgerRecordExecution]!
     stop_price: Float
     average_price: Float
     reject_reason: String
@@ -47,8 +50,53 @@ const typeDefs = gql`
   }
 
   type LedgerRecordExecution {
-    
+    id: ID!
+    ipo_access_execution_rank: String
+    price: Float!
+    quantity: Float!
+    settlement_date: String!
+    timestamp: String!
   }
+
+    "Robinhood UUID representing the symbol"
+  type LedgerOptionRecord {
+    id: ID!
+    chain_id: ID!    
+    name: String!
+    symbol: String!
+    simple_name: String!
+    ref_id: ID
+    direction: String!
+    legs: [String]!
+    type: String!
+    trigger: String!
+    state: String!
+    price: Float
+    premium: Float
+    processed_premium: Float!
+    quantity: Int!
+    processed_quantity: Int!
+    pending_quantity: Int!
+    canceled_quantity: Int!
+    opening_strategy: String
+    closing_strategy: String
+    response_strategy: String
+    stop_price: Float!
+    time_in_force: String!
+    cancel_url: String
+    created_at: String!
+    updated_at: String!
+  }
+
+  type LedgerOptionRecordLeg {
+    id: ID!
+    ipo_access_execution_rank: String
+    price: Float!
+    quantity: Float!
+    settlement_date: String!
+    timestamp: String!
+  }
+
 `;
 
 module.exports = typeDefs;

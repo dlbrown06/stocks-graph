@@ -1,8 +1,10 @@
 const getMember = require('../../lib/getMember');
+const { getLimitSql } = require('../../lib/sqlHelpers');
 
 const Query = {
   ledger: async (parent, args, context) => {
     const { logger, db } = context;
+    const { limit = 100, offset = 0 } = args;
     const member = getMember(context);
     if (!member) {
       throw new Error('Member Not Logged In');
@@ -28,7 +30,8 @@ const Query = {
           WHERE
             ${where.join(' and ')} 
           ORDER BY
-            rl.created_at DESC;
+            rl.created_at DESC
+          ${getLimitSql(limit, offset)};
         `,
         whereParams,
       );

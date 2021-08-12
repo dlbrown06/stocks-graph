@@ -1,8 +1,10 @@
 const getMember = require('../../lib/getMember');
+const { getLimitSql } = require('../../lib/sqlHelpers');
 
 const Query = {
   ledger: async (parent, args, context) => {
     const { logger, db } = context;
+    const { limit = 100, offset = 0 } = args;
     const member = getMember(context);
     if (!member) {
       throw new Error('Member Not Logged In');
@@ -26,21 +28,15 @@ const Query = {
             ID INNER JOIN stocks.robinhood_ledger_options rlo ON rlo.account = rml.account
             LEFT JOIN stocks.robinhood_instruments ri ON ri.symbol = rlo.chain_symbol 
           WHERE
-            ${where.join(' and ')}           
+            ${where.join(' and ')} 
           ORDER BY
-            rlo.created_at DESC;
+            rlo.created_at DESC
+          ${getLimitSql(limit, offset)};
         `,
         whereParams,
       );
-      console.log(result);
-      //   return result.rows
-      //     .map((row) => {
-      //       row.open_date = moment(row.open_date).format('YYYY-MM-DD');
-      //       row.close_date = moment(row.close_date).format('YYYY-MM-DD');
-      //       row.expiration = moment(row.expiration).format('YYYY-MM-DD');
-      //       return row;
-      //     })
-      //     .pop();
+
+      return result.rows;
     } catch (error) {
       logger.error(error, 'Failed to query ledger');
       return [];
