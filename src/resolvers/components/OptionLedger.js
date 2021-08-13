@@ -2,7 +2,7 @@ const getMember = require('../../lib/getMember');
 const { getLimitSql } = require('../../lib/sqlHelpers');
 
 const Query = {
-  ledger: async (parent, args, context) => {
+  optionLedger: async (parent, args, context) => {
     const { logger, db } = context;
     const { limit = 100, offset = 0 } = args;
     const member = getMember(context);
@@ -11,7 +11,7 @@ const Query = {
     }
 
     // building the where clause
-    const where = ['member_id=$1'];
+    const where = ['ri.symbol is not null', 'member_id=$1'];
     const whereParams = [member.id];
 
     try {

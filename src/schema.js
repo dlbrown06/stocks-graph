@@ -1,7 +1,6 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
-  
   type Query {
     ledger(offset: Int, limit: Int): [LedgerRecord]!
     optionLedger(offset: Int, limit: Int): [LedgerOptionRecord]!
@@ -58,16 +57,16 @@ const typeDefs = gql`
     timestamp: String!
   }
 
-    "Robinhood UUID representing the symbol"
+  "Robinhood UUID representing the symbol"
   type LedgerOptionRecord {
     id: ID!
-    chain_id: ID!    
+    chain_id: ID!
     name: String!
     symbol: String!
     simple_name: String!
     ref_id: ID
     direction: String!
-    legs: [String]!
+    legs: [LedgerOptionRecordLeg]!
     type: String!
     trigger: String!
     state: String!
@@ -90,13 +89,15 @@ const typeDefs = gql`
 
   type LedgerOptionRecordLeg {
     id: ID!
-    ipo_access_execution_rank: String
-    price: Float!
-    quantity: Float!
-    settlement_date: String!
-    timestamp: String!
+    expiration_date: String
+    option: String
+    option_type: String
+    position_effect: String
+    ratio_quantity: Int
+    side: String
+    strike_price: Float
+    executions: [LedgerRecordExecution]
   }
-
 `;
 
 module.exports = typeDefs;
