@@ -59,45 +59,56 @@ const typeDefs = gql`
 
   "Robinhood UUID representing the symbol"
   type LedgerOptionRecord {
-    id: ID!
-    chain_id: ID!
-    name: String!
-    symbol: String!
-    simple_name: String!
-    ref_id: ID
+    fill_date: String!
+    chain_symbol: String!
     direction: String!
-    legs: [LedgerOptionRecordLeg]!
-    type: String!
-    trigger: String!
-    state: String!
-    price: Float
-    premium: Float
-    processed_premium: Float!
+    strike: String!
+    expiration_date: String!
     quantity: Int!
-    processed_quantity: Int!
-    pending_quantity: Int!
-    canceled_quantity: Int!
-    opening_strategy: String
-    closing_strategy: String
-    response_strategy: String
-    stop_price: Float!
-    time_in_force: String!
-    cancel_url: String
+    price: String!
+    total: String!
     created_at: String!
-    updated_at: String!
   }
+  # type LedgerOptionRecord {
+  #   id: ID!
+  #   chain_id: ID!
+  #   name: String!
+  #   symbol: String!
+  #   simple_name: String!
+  #   ref_id: ID
+  #   direction: String!
+  #   legs: [LedgerOptionRecordLeg]!
+  #   type: String!
+  #   trigger: String!
+  #   state: String!
+  #   price: Float
+  #   premium: Float
+  #   processed_premium: Float!
+  #   quantity: Int!
+  #   processed_quantity: Int!
+  #   pending_quantity: Int!
+  #   canceled_quantity: Int!
+  #   opening_strategy: String
+  #   closing_strategy: String
+  #   response_strategy: String
+  #   stop_price: Float!
+  #   time_in_force: String!
+  #   cancel_url: String
+  #   created_at: String!
+  #   updated_at: String!
+  # }
 
-  type LedgerOptionRecordLeg {
-    id: ID!
-    expiration_date: String
-    option: String
-    option_type: String
-    position_effect: String
-    ratio_quantity: Int
-    side: String
-    strike_price: Float
-    executions: [LedgerRecordExecution]
-  }
+  # type LedgerOptionRecordLeg {
+  #   id: ID!
+  #   expiration_date: String
+  #   option: String
+  #   option_type: String
+  #   position_effect: String
+  #   ratio_quantity: Int
+  #   side: String
+  #   strike_price: Float
+  #   executions: [LedgerRecordExecution]
+  # }
 `;
 
 module.exports = typeDefs;
