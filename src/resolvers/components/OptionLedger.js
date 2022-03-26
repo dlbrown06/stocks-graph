@@ -4,7 +4,7 @@ const { getLimitSql } = require('../../lib/sqlHelpers');
 const Query = {
   optionLedger: async (parent, args, context) => {
     const { logger, db } = context;
-    const { ticker = null, limit = 100, offset = 0 } = args;
+    const { ticker = null, start_time = null, limit = 100, offset = 0 } = args;
     // const member = getMember(context);
     // if (!member) {
     //   throw new Error('Member Not Logged In');
@@ -17,6 +17,10 @@ const Query = {
     if (ticker) {
       where.push(`ticker = $${whereCnt++}`);
       whereParams.push(ticker);
+    }
+    if (start_time) {
+      where.push(`fill_date >= $${whereCnt++}`);
+      whereParams.push(start_time);
     }
 
     try {

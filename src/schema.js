@@ -3,7 +3,12 @@ const { gql } = require('apollo-server');
 const typeDefs = gql`
   type Query {
     ledger(offset: Int, limit: Int): [LedgerRecord]!
-    optionLedger(ticker: String, offset: Int, limit: Int): [LedgerOptionRecord]!
+    optionLedger(
+      ticker: String
+      start_time: String
+      offset: Int
+      limit: Int
+    ): [LedgerOptionRecord]!
   }
 
   type Mutation {
